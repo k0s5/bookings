@@ -1,0 +1,16 @@
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package-prisma.json ./package.json
+COPY prisma/schema.prisma ./prisma/schema.prisma
+
+# OS deps for prisma generate
+RUN apk add --no-cache openssl
+
+# Enable pnpm via corepack in builder stage
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+RUN pnpm install
+
+RUN pnpm prisma:generate

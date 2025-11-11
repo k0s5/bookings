@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../prisma/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("BK_POSTGRES_URI")
+}
+
+model Event {
+  id               Int        @id @default(autoincrement())
+  name             String     @unique
+  totalSeats       Int        @map("total_seats")
+  bookings         Booking[]
+  createdAt        DateTime   @default(now()) @map("created_at")
+  updatedAt        DateTime   @updatedAt @map("updated_at")
+  
+  @@unique([id, name], name: "event_id_name_unique")
+  @@map("events")
+}
+
+model Booking {
+  id               Int        @id @default(autoincrement())
+  eventId          Int        @map("event_id")
+  userId           String     @map("user_id")
+  event            Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  createdAt        DateTime   @default(now()) @map("created_at")
+
+  @@unique([eventId, userId], name: "booking_user_event_unique")
+  @@map("bookings")
+}
