@@ -55,6 +55,7 @@ pnpm start:dev
 
 - **GET /api/events** - получение всех событий
 - **GET /api/events/1** - получение события по id события
+- **GET /api/events/top** - получение событий по количеству бронирований
 - **PUT /api/events** - создание события
 - **PATCH /api/events/1** - обновление данных события
 - **DELETE /api/events/:id** - удаление события
