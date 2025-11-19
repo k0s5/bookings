@@ -22,6 +22,11 @@ export class EventController {
     return await this.eventService.getEvents()
   }
 
+  @Get('top')
+  async getTopBookings() {
+    return await this.eventService.getTopEventBookings()
+  }
+
   @Get(':eventId')
   async getEvent(
     @Param(new ValidationPipe({ transform: true })) params: EventIdDto

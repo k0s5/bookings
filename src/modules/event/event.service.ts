@@ -16,6 +16,22 @@ export class EventService {
     return await this.prismaService.event.findMany()
   }
 
+  async getTopEventBookings() {
+    return await this.prismaService.$queryRaw`
+    SELECT
+      e.name,
+      e.total_seats,
+      e.created_at,
+      COUNT(b.id) as booking_count
+    FROM "bookings" b
+    JOIN "events" e ON b."event_id" = e.id
+    WHERE e.created_at > NOW() - INTERVAL '30 days'
+    GROUP BY e.id
+    ORDER BY booking_count DESC
+    LIMIT 10
+    `
+  }
+
   async getEvent(eventId: number) {
     const event = await this.prismaService.event.findUnique({
       where: {
